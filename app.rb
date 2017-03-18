@@ -2,23 +2,40 @@ require 'sinatra/base'
 require 'sinatra/json'
 require 'json'
 require 'pry'
+require 'yaml'
 
 class ListApp < Sinatra::Base
   set :logging, true
+  set :method_override, true
 
-  DB = {}
-
-  get '/list' do
-    json(DB)
+  get '/' do
+    @db = read_database
+    erb :home
   end
 
-  post '/list' do
+  post '/' do
+    db = read_database
+    db['data'].push(params['note'])
+    update_database(db)
+    # binding.pry
+    redirect '/'
   end
 
-  patch '/list' do
+  delete '/' do
+    db = read_database
+    db['data'].pop
+    update_database(db)
+    redirect '/'
   end
 
-  delete '/list' do
+  def read_database
+    YAML.load_file('db.yml')
+  end
+
+  def update_database(db)
+    File.open('db.yml', 'w') do |f|
+      YAML.dump(db, f)
+    end
   end
 end
 

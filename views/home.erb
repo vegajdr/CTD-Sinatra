@@ -1,0 +1,13 @@
+<h2>Code The Dream Sinatra App</h2>
+<% @db["data"].each do |note| %>
+   <p><%= note %></p>
+<% end %>
+<form action="/" method="post">
+  <input type="hidden" name="_method" value="DELETE">
+  <input type="submit" name="" value="Delete!">
+</form>
+
+<form action="/" method="post">
+  <input type="text" name="note" value="" autofocus>
+  <input type="submit" name="" value="Submit">
+</form>
